@@ -37,6 +37,12 @@ const onView = computed(
 
 const cipher = (s) => atob(s).split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ 0x07)).join('');
 
+const go = (type) => {
+  const e = cipher('Y2lwdHczNzBHYGpmbmspZGhq');
+  const p = cipher('LDMzMD80NjQ3PjA0MA==');
+  window.location.href = (type === 'e' ? 'mailto:' : 'tel:') + (type === 'e' ? e : p);
+};
+
 onMounted(() => {
   window.addEventListener("hashchange", () => {
     path.value = window.location.hash;
@@ -49,14 +55,8 @@ onMounted(() => {
 
   const [e, p] = [cipher('Y2lwdHczNzBHYGpmbmspZGhq'), cipher('LDMzMD80NjQ3PjA0MA==')];
 
-  if (fEmail.value) {
-    fEmail.value.href = `mailto:${e}`;
-    fEmail.value.innerText = e;
-  }
-  if (fPhone.value) {
-    fPhone.value.href = `tel:${p}`;
-    fPhone.value.innerText = p;
-  }
+  if (fEmail.value) fEmail.value.innerText = e.split('').reverse().join('');
+  if (fPhone.value) fPhone.value.innerText = p.split('').reverse().join('');
 });
 
 onUnmounted(() => window.removeEventListener("mousemove", onMove));
@@ -74,14 +74,8 @@ onUnmounted(() => window.removeEventListener("mousemove", onMove));
         <div class="nav-links">
           <a href="#">Home</a>
           <a href="#services">Services</a>
-          <a href="https://nano-sketch.github.io/porfv/" target="_blank"
-            >Portfolio</a
-          >
-          <a
-            href="https://maps.app.goo.gl/6teBYEfYSgPnAp9v7?g_st=ipc"
-            target="_blank"
-            >Contact</a
-          >
+          <a href="https://nano-sketch.github.io/porfv/" target="_blank">Portfolio</a>
+          <a href="https://maps.app.goo.gl/6teBYEfYSgPnAp9v7?g_st=ipc" target="_blank">Contact</a>
         </div>
         <button class="hamburger" :class="{ active: menuOpen }" @click="toggle">
           <span></span><span></span><span></span>
@@ -92,18 +86,8 @@ onUnmounted(() => window.removeEventListener("mousemove", onMove));
         <div v-show="menuOpen" class="mobile-menu">
           <a href="#" @click="close">Home</a>
           <a href="#services" @click="close">Services</a>
-          <a
-            href="https://nano-sketch.github.io/porfv/"
-            target="_blank"
-            @click="close"
-            >Portfolio</a
-          >
-          <a
-            href="https://maps.app.goo.gl/6teBYEfYSgPnAp9v7?g_st=ipc"
-            target="_blank"
-            @click="close"
-            >Contact</a
-          >
+          <a href="https://nano-sketch.github.io/porfv/" target="_blank" @click="close">Portfolio</a>
+          <a href="https://maps.app.goo.gl/6teBYEfYSgPnAp9v7?g_st=ipc" target="_blank" @click="close">Contact</a>
         </div>
       </transition>
 
@@ -115,8 +99,8 @@ onUnmounted(() => window.removeEventListener("mousemove", onMove));
           <div class="footer-links">
             <a href="#privacy">Privacy</a>
             <a href="#terms">Terms</a>
-            <a ref="fEmail" class="secure-contact"></a>
-            <a ref="fPhone" class="secure-contact"></a>
+            <span ref="fEmail" class="secure-contact" @click="go('e')"></span>
+            <span ref="fPhone" class="secure-contact" @click="go('p')"></span>
           </div>
         </div>
       </footer>
@@ -239,6 +223,8 @@ onUnmounted(() => window.removeEventListener("mousemove", onMove));
   cursor: pointer;
   font-size: 0.75rem;
   transition: color 0.15s;
+  unicode-bidi: bidi-override;
+  direction: rtl;
 }
 .secure-contact:hover {
   color: var(--text-primary);

@@ -2,12 +2,12 @@
 import { onMounted, ref } from "vue";
 const emailLink = ref(null);
 const cipher = (s) => atob(s).split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ 0x07)).join('');
+const go = () => {
+  window.location.href = 'mailto:' + cipher('Y2lwdHczNzBHYGpmbmspZGhq');
+};
 onMounted(() => {
   const e = cipher('Y2lwdHczNzBHYGpmbmspZGhq');
-  if (emailLink.value) {
-    emailLink.value.href = `mailto:${e}`;
-    emailLink.value.innerText = e;
-  }
+  if (emailLink.value) emailLink.value.innerText = e.split('').reverse().join('');
 });
 </script>
 
@@ -35,7 +35,7 @@ onMounted(() => {
         <h2>4. Contact</h2>
         <p>
           For privacy concerns, contact
-          <a ref="emailLink" class="secure-contact">Loading...</a>
+          <span ref="emailLink" class="secure-contact" @click="go"></span>
         </p>
       </section>
     </div>
@@ -81,5 +81,10 @@ p {
   text-decoration: none;
   user-select: none;
   cursor: pointer;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.secure-contact:hover {
+  text-decoration: underline;
 }
 </style>
