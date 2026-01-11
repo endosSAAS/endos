@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted, ref } from "vue";
 const emailLink = ref(null);
+const cipher = (s) => atob(s).split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ 0x07)).join('');
 onMounted(() => {
-  const e = atob("ZG53c3A0MDdAZ21haWwuY29t");
+  const e = cipher('Y2lwdHczNzBHYGpmbmspZGhq');
   if (emailLink.value) {
     emailLink.value.href = `mailto:${e}`;
     emailLink.value.innerText = e;

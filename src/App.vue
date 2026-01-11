@@ -35,6 +35,8 @@ const onView = computed(
     }[path.value] || Home)
 );
 
+const cipher = (s) => atob(s).split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ 0x07)).join('');
+
 onMounted(() => {
   window.addEventListener("hashchange", () => {
     path.value = window.location.hash;
@@ -45,10 +47,7 @@ onMounted(() => {
   window.addEventListener("mousemove", onMove, { passive: true });
   document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-  const [e, p] = [
-    atob("ZG53c3A0MDdAZ21haWwuY29t"),
-    atob("KzQ0NzgzMTMwOTczNw=="),
-  ];
+  const [e, p] = [cipher('Y2lwdHczNzBHYGpmbmspZGhq'), cipher('LDMzMD80NjQ3PjA0MA==')];
 
   if (fEmail.value) {
     fEmail.value.href = `mailto:${e}`;
